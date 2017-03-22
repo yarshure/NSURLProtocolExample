@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		69F6F55A1E822738009B658D /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69F6F5591E822738009B658D /* Launch Screen.storyboard */; };
 		87C15639196ED7F9001ABCAD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C15638196ED7F9001ABCAD /* AppDelegate.swift */; };
 		87C1563C196ED7F9001ABCAD /* NSURLProtocolExample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 87C1563A196ED7F9001ABCAD /* NSURLProtocolExample.xcdatamodeld */; };
 		87C1563E196ED7F9001ABCAD /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C1563D196ED7F9001ABCAD /* BrowserViewController.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		69F6F5591E822738009B658D /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		87C15633196ED7F9001ABCAD /* NSURLProtocolExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NSURLProtocolExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		87C15637196ED7F9001ABCAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		87C15638196ED7F9001ABCAD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 		87C1562A196ED7F9001ABCAD = {
 			isa = PBXGroup;
 			children = (
+				69F6F5591E822738009B658D /* Launch Screen.storyboard */,
 				87C15635196ED7F9001ABCAD /* NSURLProtocolExample */,
 				87C1564B196ED7F9001ABCAD /* NSURLProtocolExampleTests */,
 				87C15634196ED7F9001ABCAD /* Products */,
@@ -165,9 +168,11 @@
 					87C15632196ED7F9001ABCAD = {
 						CreatedOnToolsVersion = 6.0;
 						DevelopmentTeam = 745WQDK4L7;
+						LastSwiftMigration = 0820;
 					};
 					87C15647196ED7F9001ABCAD = {
 						CreatedOnToolsVersion = 6.0;
+						LastSwiftMigration = 0820;
 						TestTargetID = 87C15632196ED7F9001ABCAD;
 					};
 				};
@@ -196,6 +201,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69F6F55A1E822738009B658D /* Launch Screen.storyboard in Resources */,
 				87C15641196ED7F9001ABCAD /* Main.storyboard in Resources */,
 				87C15643196ED7F9001ABCAD /* Images.xcassets in Resources */,
 			);
@@ -347,7 +353,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zedenem.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -361,7 +367,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zedenem.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -382,6 +388,7 @@
 				METAL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zedenem.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Debug;
@@ -399,6 +406,7 @@
 				METAL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zedenem.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Release;

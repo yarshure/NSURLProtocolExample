@@ -15,8 +15,8 @@ class BrowserViewController: UIViewController, UITextFieldDelegate {
   
   //MARK: IBAction
   
-  @IBAction func buttonGoClicked(sender: UIButton) {
-    if self.textField.isFirstResponder() {
+  @IBAction func buttonGoClicked(_ sender: UIButton) {
+    if self.textField.isFirstResponder {
       self.textField.resignFirstResponder()
     }
     
@@ -25,7 +25,7 @@ class BrowserViewController: UIViewController, UITextFieldDelegate {
   
   //MARK: UITextFieldDelegate
   
-  func textFieldShouldReturn(textField: UITextField) -> Bool {
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
     textField.resignFirstResponder()
     
     self.sendRequest()
@@ -37,8 +37,8 @@ class BrowserViewController: UIViewController, UITextFieldDelegate {
   
   func sendRequest() {
     if let text = self.textField.text {
-      let url = NSURL(string:text)
-      let request = NSURLRequest(URL:url!)
+      let url = URL(string:text)
+      let request = URLRequest(url:url!)
       self.webView.loadRequest(request)
     }
   }

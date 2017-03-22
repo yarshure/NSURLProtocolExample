@@ -3,29 +3,29 @@ import CoreData
 
 var requestCount = 0
 
-class MyURLProtocol: NSURLProtocol {
+class MyURLProtocol: URLProtocol {
   
   var connection: NSURLConnection!
   var mutableData: NSMutableData!
-  var response: NSURLResponse!
+  var response: URLResponse!
   
-  override class func canInitWithRequest(request: NSURLRequest) -> Bool {
-    print("Request #\(requestCount): URL = \(request.URL!.absoluteString)")
+  override class func canInit(with request: URLRequest) -> Bool {
+    print("Request #\(requestCount): URL = \(request.url!.absoluteString)")
     requestCount += 1
-    if NSURLProtocol.propertyForKey("MyURLProtocolHandledKey", inRequest: request) != nil {
+    if URLProtocol.property(forKey: "MyURLProtocolHandledKey", in: request) != nil {
       return false
     }
     
     return true
   }
   
-  override class func canonicalRequestForRequest(request: NSURLRequest) -> NSURLRequest {
+  override class func canonicalRequest(for request: URLRequest) -> URLRequest {
     return request
   }
   
-  override class func requestIsCacheEquivalent(aRequest: NSURLRequest,
-    toRequest bRequest: NSURLRequest) -> Bool {
-      return super.requestIsCacheEquivalent(aRequest, toRequest:bRequest)
+  override class func requestIsCacheEquivalent(_ aRequest: URLRequest,
+    to bRequest: URLRequest) -> Bool {
+      return super.requestIsCacheEquivalent(aRequest, to:bRequest)
   }
   
   override func startLoading() {
@@ -35,24 +35,24 @@ class MyURLProtocol: NSURLProtocol {
       print("Serving response from cache")
       
       // 2
-      let data = cachedResponse.valueForKey("data") as! NSData!
-      let mimeType = cachedResponse.valueForKey("mimeType") as! String!
-      let encoding = cachedResponse.valueForKey("encoding") as! String!
+      let data = cachedResponse.value(forKey: "data") as! Data!
+      let mimeType = cachedResponse.value(forKey: "mimeType") as! String!
+      let encoding = cachedResponse.value(forKey: "encoding") as! String!
       
       // 3
-      let response = NSURLResponse(URL: self.request.URL!, MIMEType: mimeType, expectedContentLength: data.length, textEncodingName: encoding)
+      let response = URLResponse(url: self.request.url!, mimeType: mimeType, expectedContentLength: (data?.count)!, textEncodingName: encoding)
       
       // 4
-      self.client!.URLProtocol(self, didReceiveResponse: response, cacheStoragePolicy: .NotAllowed)
-      self.client!.URLProtocol(self, didLoadData: data)
-      self.client!.URLProtocolDidFinishLoading(self)
+      self.client!.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+      self.client!.urlProtocol(self, didLoad: data!)
+      self.client!.urlProtocolDidFinishLoading(self)
     } else {
       // 5
       print("Serving response from NSURLConnection")
       
-      let newRequest = self.request.mutableCopy() as! NSMutableURLRequest
-      NSURLProtocol.setProperty(true, forKey: "MyURLProtocolHandledKey", inRequest: newRequest)
-      self.connection = NSURLConnection(request: newRequest, delegate: self)
+      let newRequest = (self.request as NSURLRequest).mutableCopy() as! NSMutableURLRequest
+      URLProtocol.setProperty(true, forKey: "MyURLProtocolHandledKey", in: newRequest)
+      self.connection = NSURLConnection(request: newRequest as URLRequest, delegate: self)
     }
   }
   
@@ -63,41 +63,41 @@ class MyURLProtocol: NSURLProtocol {
     self.connection = nil
   }
   
-  func connection(connection: NSURLConnection!, didReceiveResponse response: NSURLResponse!) {
-    self.client!.URLProtocol(self, didReceiveResponse: response, cacheStoragePolicy: .NotAllowed)
+  func connection(_ connection: NSURLConnection!, didReceiveResponse response: URLResponse!) {
+    self.client!.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
     
     self.response = response
     self.mutableData = NSMutableData()
   }
   
-  func connection(connection: NSURLConnection!, didReceiveData data: NSData!) {
-    self.client!.URLProtocol(self, didLoadData: data)
-    self.mutableData.appendData(data)
+  func connection(_ connection: NSURLConnection!, didReceiveData data: Data!) {
+    self.client!.urlProtocol(self, didLoad: data)
+    self.mutableData.append(data)
   }
   
-  func connectionDidFinishLoading(connection: NSURLConnection!) {
-    self.client!.URLProtocolDidFinishLoading(self)
+  func connectionDidFinishLoading(_ connection: NSURLConnection!) {
+    self.client!.urlProtocolDidFinishLoading(self)
     self.saveCachedResponse()
   }
   
-  func connection(connection: NSURLConnection!, didFailWithError error: NSError!) {
-    self.client!.URLProtocol(self, didFailWithError: error)
+  func connection(_ connection: NSURLConnection!, didFailWithError error: NSError!) {
+    self.client!.urlProtocol(self, didFailWithError: error)
   }
   
   func saveCachedResponse () {
     print("Saving cached response")
     
     // 1
-    let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    let delegate = UIApplication.shared.delegate as! AppDelegate
     let context = delegate.managedObjectContext!
     
     // 2
-    let cachedResponse = NSEntityDescription.insertNewObjectForEntityForName("CachedURLResponse", inManagedObjectContext: context) as NSManagedObject
+    let cachedResponse = NSEntityDescription.insertNewObject(forEntityName: "CachedURLResponse", into: context) as NSManagedObject
     
     cachedResponse.setValue(self.mutableData, forKey: "data")
-    cachedResponse.setValue(self.request.URL!.absoluteString, forKey: "url")
-    cachedResponse.setValue(NSDate(), forKey: "timestamp")
-    cachedResponse.setValue(self.response.MIMEType, forKey: "mimeType")
+    cachedResponse.setValue(self.request.url!.absoluteString, forKey: "url")
+    cachedResponse.setValue(Date(), forKey: "timestamp")
+    cachedResponse.setValue(self.response.mimeType, forKey: "mimeType")
     cachedResponse.setValue(self.response.textEncodingName, forKey: "encoding")
     
     // 3
@@ -112,22 +112,22 @@ class MyURLProtocol: NSURLProtocol {
   
   func cachedResponseForCurrentRequest() -> NSManagedObject? {
     // 1
-    let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    let delegate = UIApplication.shared.delegate as! AppDelegate
     let context = delegate.managedObjectContext!
     
     // 2
-    let fetchRequest = NSFetchRequest()
-    let entity = NSEntityDescription.entityForName("CachedURLResponse", inManagedObjectContext: context)
+    let fetchRequest = NSFetchRequest<NSFetchRequestResult>()
+    let entity = NSEntityDescription.entity(forEntityName: "CachedURLResponse", in: context)
     fetchRequest.entity = entity
     
     // 3
-    let predicate = NSPredicate(format:"url == %@", self.request.URL!.absoluteString!)
+    let predicate = NSPredicate(format:"url == %@", self.request.url!.absoluteString)
     fetchRequest.predicate = predicate
     
     // 4
     
     do {
-        let possibleResult = try context.executeFetchRequest(fetchRequest)
+        let possibleResult = try context.fetch(fetchRequest)
         //let possibleResult =  possibleResultOrg    as Array<NSManagedObject>?
     
     // 5
